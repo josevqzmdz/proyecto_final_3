@@ -6,12 +6,33 @@ from keras import layers
 from keras.datasets import mnist
 (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 
+"""
+Now you understand that this model consists of a chain of two Dense layers,
+ that each
+layer applies a few simple tensor operations to the input data, 
+and that these opera-
+tions involve weight tensors. Weight tensors, which are attributes of the layers, are
+where the knowledge of the model persists.
+"""
+
 model = keras.Sequential([
     layers.Dense(512, activation="relu"),
     layers.Dense(10, activation="softmax")
 ])
 
 # 29
+"""
+Now you understand that sparse_categorical_crossentropy is the loss function
+that’s used as a feedback signal for learning the weight tensors, and which 
+the train-
+ing phase will attempt to minimize. You also know that this reduction 
+of the loss
+happens via mini-batch stochastic gradient descent. The exact rules governing
+ a spe-
+cific use of gradient descent are defined by the rmsprop optimizer passed as 
+the first
+argument.
+"""
 model.compile(optimizer="rmsprop",
               loss="sparse_categorical_crossentropy",
               metrics=["accuracy"])
@@ -19,6 +40,15 @@ model.compile(optimizer="rmsprop",
 class example1:
 
     def ejemplo1(self):
+
+        """
+        Now you understand that the input images are stored in NumPy tensors,
+         which are
+        here formatted as float32 tensors of shape (60000, 784)
+        (training data) and (10000,
+        784) (test data) respectively.
+        :return:
+        """
         train_image = train_images.reshape((60000, 28 * 28))
         train_image = train_images.astype("float32") / 255
         test_image = test_images.reshape((10000, 28 * 28))
@@ -28,6 +58,25 @@ class example1:
         train_image.shape
         len(train_labels)
         print(train_labels)
+        """
+        Now you understand what happens when you call fit: the model will 
+        start to iterate
+        on the training data in mini-batches of 128 samples, 5 times over
+         (each iteration over
+        all the training data is called an epoch). For each batch, 
+        the model will compute the
+        gradient of the loss with regard to the weights (using the 
+        Backpropagation algorithm,
+        which derives from the chain rule in calculus) and move the
+         weights in the direction
+        that will reduce the value of the loss for this batch
+        
+        After these 5 epochs, the model will have performed 2,345 gradient 
+        updates (469
+        per epoch), and the loss of the model will be sufficiently low
+        that the model will be
+        capable of classifying handwritten digits with high accuracy.
+        """
         model.fit(train_image, train_labels, epochs=5, batch_size=128)
 
         # 30
@@ -111,7 +160,7 @@ class example1:
     # y.shape[0]. The result is a matrix with shape (x.shape[0], y.shape[1]), where the
     # coefficients are the vector products between the rows of x and the columns of y.
     # Here’s the naive implementation:
-    
+
     def naive_matrix_dot(self, x, y):
         assert len(x.shape) == 2
 
@@ -124,3 +173,9 @@ class example1:
                 column_y = y[:, j]
                 z[i, j] = self.naive_vector_dot(row_x, column_y)
         return z
+
+    def gradientTape1(self):
+        x = tf.Variable(0)
+        with tf.GradientTape() as tape:
+            y = 2 * x + 3
+        grad_of_y_wrt_x = tape.gradient(y, x)
