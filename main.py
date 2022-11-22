@@ -26,4 +26,4 @@ from keras import layers
 from BatchGenerator import *
 
 if __name__ == '__main__':
-    print()
+    e = IMDB_examples()
