@@ -23,7 +23,6 @@ from keras import layers
 
 from BatchGenerator import *
 
-
 class IMDB_examples:
 
     def __init__(self):
@@ -62,7 +61,7 @@ class IMDB_examples:
         # Now the data is ready to be fed into a neural network.
         y_train = np.asarray(train_labels).astype("float32")
         y_test = np.asarray(test_labels).astype("float32")
-
+        # https://stackoverflow.com/questions/509211/understanding-slicing
         x_val = x_train[:10000]
         partial_x_train = x_train[:10000]
         y_val = y_train[:10000]
@@ -107,6 +106,28 @@ class IMDB_examples:
         plt.legend()
         plt.show()
 
+        """
+        As you can see, the training loss decreases with every epoch,
+         and the training accuracy
+        increases with every epoch. That’s what you would expect when 
+        running gradient-
+        descent optimization—the quantity you’re trying to minimize
+         should be less with
+        every iteration. But that isn’t the case for the validation
+         loss and accuracy: they seem to
+        peak at the fourth epoch. This is an example of what we warned 
+        against earlier: a
+        model that performs better on the training data isn’t necessarily
+         a model that will
+        do better on data it has never seen before. In precise terms,
+         what you’re seeing is
+        overfitting: after the fourth epoch, you’re overoptimizing on
+         the training data, and you
+        end up learning representations that are specific to the training 
+        data and don’t gener-
+        alize to data outside of the training set.
+        """
+
     # 98
     def vectorize_sequences(self, sequences, dimension=10000):
         results = np.zeros((len(sequences), dimension))
@@ -121,4 +142,28 @@ class IMDB_examples:
         # Plotting the training and validation loss
         print()
 
-
+class IMDB_2(IMDB_examples):
+    def __init__(self):
+        x_train = self.vectorize_sequences(train_data)
+        x_test = self.vectorize_sequences(test_data)
+        x_train[0]
+        # You should also vectorize your labels, which is straightforward
+        # Now the data is ready to be fed into a neural network.
+        y_train = np.asarray(train_labels).astype("float32")
+        y_test = np.asarray(test_labels).astype("float32")
+        # https://stackoverflow.com/questions/509211/understanding-slicing
+        x_val = x_train[:10000]
+        partial_x_train = x_train[:10000]
+        y_val = y_train[:10000]
+        partial_y_train = y_train[:10000]
+        model = keras.Sequential([
+            layers.Dense(16, activation="relu"),
+            layers.Dense(16, activation="relu"),
+            layers.Dense(1, activation="sigmoid")
+        ])
+        model.compile(optimizer="rmsprop",
+                      loss="binary_crossentropy",
+                      metrics=["accuracy"]
+                      )
+        model.fit(x_train, y_train, epochs=4, batch_size=512)
+        results = model.evaluate(x_test, y_test)

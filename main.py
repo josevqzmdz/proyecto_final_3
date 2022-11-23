@@ -25,5 +25,13 @@ from keras import layers
 
 from BatchGenerator import *
 
+from chapter_4_IMDB.Reuters import Reuters
+
+from chapter_4_IMDB.Predictions import Predictions
+
+from chapter_4_IMDB.BostonHouses import BostonHouses
+
 if __name__ == '__main__':
-    e = IMDB_examples()
+    #e = Reuters()
+    #e = Predictions()
+    e = BostonHouses()
