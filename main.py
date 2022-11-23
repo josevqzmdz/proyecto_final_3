@@ -32,7 +32,10 @@ from chapter_4_IMDB.Predictions import Predictions
 
 from chapter_4_IMDB.BostonHouses import BostonHouses
 
+from Chapter_5_ML.Data_Noise import Data_Noise
+
 if __name__ == '__main__':
     #e = Reuters()
     #e = Predictions()
-    e = BostonHouses()
+    #e = BostonHouses()
+    e = Data_Noise()
